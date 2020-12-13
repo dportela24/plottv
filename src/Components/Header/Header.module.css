@@ -1,7 +1,7 @@
 /* Add a black background color to the top navigation */
 .Header {
-    background-color: #828282;
-    padding: 5px;
+    background-color: #ccc;
+    padding: 10px;
 }
 
 .Search {
@@ -13,7 +13,7 @@
 
 .SearchBar {
     width: 100%;
-    border: 3px solid #00B4CC;
+    border: 3px solid #3c91e8;
     border-right: none;
     padding: 5px 15px;
     height: 20px;
@@ -31,8 +31,8 @@
 .SearchButton {
     width: 40px;
     height: 36px;
-    border: 1px solid #00B4CC;
-    background: #00B4CC;
+    border: 1px solid #3c91e8;
+    background: #3c91e8;
     text-align: center;
     color: #fff;
     border-radius: 0 5px 5px 0;
