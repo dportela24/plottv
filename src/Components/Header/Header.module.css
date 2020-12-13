@@ -1,0 +1,41 @@
+/* Add a black background color to the top navigation */
+.Header {
+    background-color: #828282;
+    padding: 5px;
+}
+
+.Search {
+    width: 33%;
+    position: relative;
+    display: flex;
+    margin: auto;
+}
+
+.SearchBar {
+    width: 100%;
+    border: 3px solid #00B4CC;
+    border-right: none;
+    padding: 5px 15px;
+    height: 20px;
+    border-radius: 5px 0 0 5px;
+    outline: none;
+    color: #aaa;
+    letter-spacing: 1px;
+}
+
+.SearchBar:focus {
+    outline: none;
+    color: #000;
+}
+
+.SearchButton {
+    width: 40px;
+    height: 36px;
+    border: 1px solid #00B4CC;
+    background: #00B4CC;
+    text-align: center;
+    color: #fff;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    font-size: 20px;
+  }
