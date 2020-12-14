@@ -1,0 +1,30 @@
+.SeriesOverviewContainer {
+    display: block;
+    width: 40%;
+    margin: auto;
+    margin-top: 30px;
+    /* display: flex;
+    justify-content: center; */
+    color: #1d262b;
+}
+
+.Poster {
+    display: inline-block;
+    border-radius: 25px;
+    border: 2px solid;
+    margin-right: 30px;
+}
+
+.SeriesOverview {
+    display: inline-block;
+}
+
+.Title > * {
+    display: inline;
+}
+
+.Runtime {
+    margin-left: 10px;
+    font-size: 20px;
+    color: #888;
+}

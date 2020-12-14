@@ -1,7 +1,7 @@
 /* Add a black background color to the top navigation */
 .Header {
     background-color: #ccc;
-    padding: 10px;
+    padding: 5px;
 }
 
 .Search {

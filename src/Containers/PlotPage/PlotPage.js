@@ -1,7 +1,8 @@
 import { Component, Fragment } from "react";
 import Header from '../../Components/Header/Header'
 import Plot from "../../Components/Plot/Plot";
-import classes from './PlotPage.module.css';
+import SeriesOverview from '../../Components/SeriesOverview/SeriesOverview';
+import * as utils from '../../utils'
 import axios from 'axios';
 
 const IMDB_TITLE_URL = "https://www.imdb.com/title/";
@@ -44,8 +45,6 @@ class PlotPage extends Component {
             for (var j=0; j<episodes.length; j++) {
                 const episode = episodes[j];
                 const rating = episode.ratingValue;
-                const title = episode.name;
-                const number = episode.number;
 
                 plot_points.push({
                     "x": current_episode,
@@ -61,7 +60,8 @@ class PlotPage extends Component {
                 current_episode++;
                 if (rating > newMaxRating) {
                     newMaxRating = rating;
-                } else if (rating < newMinRating) {
+                }
+                if (rating < newMinRating) {
                     newMinRating = rating;
                 }
             }
@@ -73,14 +73,18 @@ class PlotPage extends Component {
         }
 
         this.setState({
+            name: response.name,
             seasonsData : newSeasonsData,
             showPlot: true,
             maxRating: newMaxRating,
-            minRating: newMinRating
+            minRating: newMinRating,
+            poster: response.poster,
+            runtime: response.runtime,
+            ratingCount: response.ratingCount,
+            ratingValue: response.ratingValue
         })
 
-        console.log(newSeasonsData);
-        console.log(newMaxRating)
+        console.log(this.state);
     }
 
     onClickPoint = (node) => {
@@ -90,24 +94,21 @@ class PlotPage extends Component {
 
 
     render() {
-        var plot = null;
-
-        if (this.state.showPlot) {
-            plot =  (
-                <div className={classes.Plot}>
-                    <Plot 
-                        seasonsData={this.state.seasonsData}
-                        minRating={this.state.minRating}
-                        maxRating={this.state.maxRating}
-                        onClick={this.onClickPoint}/>
-                </div>
-            )
-        }
-
         return (
             <Fragment>
                 <Header onSubmit={this.makeRequest}/>
-                {plot}
+                <Plot 
+                    name={this.state.name}
+                    seasonsData={this.state.seasonsData}
+                    minRating={this.state.minRating}
+                    maxRating={this.state.maxRating}
+                    onClick={this.onClickPoint}/>
+                <SeriesOverview
+                    poster={this.state.poster}
+                    name={this.state.name}
+                    runtime={this.state.runtime}
+                    rating={`${this.state.ratingValue}/10 from ${utils.numberWithCommas(this.state.ratingCount)}`}/>
+
             </Fragment>
         )
     }

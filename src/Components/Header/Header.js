@@ -1,4 +1,4 @@
-import classes from "./Header.module.css"
+import classes from './Header.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { motionDefaultProps } from "@nivo/core"
