@@ -12,16 +12,18 @@ class PlotPage extends Component {
         seasonsData : [],
         showPlot: false,
         maxRating: 10,
+        ratingCount: 100
     }
 
     componentDidMount = () =>  {
-        this.makeRequest("how i met your mother");
+        console.log("componenet did mount")
+        this.makeRequest("tt6468322");
     }
 
     makeRequest = (query) => {
-        axios.get('http://localhost:8080/tvseries', { params : {
-            q : query
-        }})
+        var url = utils.isImdbIdFormat(query) ? utils.generateRequestByIdURL(query) : utils.generateRequestByNameURL(query)
+        console.log("making request")
+        axios.get(url)
         .then( response => {
             this.processResponse(response.data);
         })
@@ -46,15 +48,20 @@ class PlotPage extends Component {
                 const episode = episodes[j];
                 const rating = episode.ratingValue;
 
+                // Discard episodes without rating
+                if (episode.ratingCount == null) {
+                    continue;
+                }
+
                 plot_points.push({
                     "x": current_episode,
                     "y": rating,
                     "number": episode.number,
                     "title": episode.name,
-                    "imdbId": episode.imdbID,
+                    "imdbId": episode.imdbId,
                     "ratingValue": episode.ratingValue,
                     "ratingCount": episode.ratingCount,
-                    "airdate": episode.airdate
+                    "airdate": this.parseAirdate(episode.airdate)
                 });
 
                 current_episode++;
@@ -66,48 +73,103 @@ class PlotPage extends Component {
                 }
             }
 
-            newSeasonsData.push({
-                "id": season.number,
-                "data": plot_points
-            })
+            // If season has episodes
+            if (plot_points.length > 0) {
+                newSeasonsData.push({
+                    "id": season.number,
+                    "data": plot_points
+                })
+            }
         }
 
+        var name = response.originalName != null ? response.originalName : response.name
+        var translatedName = response.originalName != null ? response.name : null
+        var runtime = this.parseRuntime(response.startYear, response.endYear)
+
         this.setState({
-            name: response.name,
+            name: name,
+            translatedName: translatedName,
             seasonsData : newSeasonsData,
-            showPlot: true,
+            showPlot: newSeasonsData.length > 0,
             maxRating: newMaxRating,
             minRating: newMinRating,
-            poster: response.poster,
-            runtime: response.runtime,
+            poster: response.posterURL,
+            runtime: runtime,
             ratingCount: response.ratingCount,
-            ratingValue: response.ratingValue
+            ratingValue: response.ratingValue,
+            summary: response.summary
         })
 
         console.log(this.state);
     }
 
+    parseAirdate = (airdateArray) => {
+        var airdate = airdateArray[0]
+
+        for (var i=1; i<airdateArray.length; i++) {
+            airdate = airdate + `-${airdateArray[i]}`
+        }
+
+        return airdate;
+    }
+
+    parseRuntime = (startYear, endYear) => {
+        var runtime
+        if (endYear == null) {
+            runtime = `${startYear}-`
+        } else if (startYear != endYear) {
+            runtime = `${startYear}-${endYear}`
+        } else {
+            runtime = startYear
+        }
+
+        return runtime
+    }
+
+    generateSeriesRatingText = () => {
+        const ratingCount = this.state.ratingCount
+        const ratingValue = this.state.ratingValue
+        var ratingText;
+
+        if (ratingCount) {
+            ratingText = `${ratingValue} out of 10 from ${utils.numberWithCommas(ratingCount)} ratings`
+        } else {
+            ratingText = "No series rating yet"
+        }
+        return ratingText
+    }
+
     onClickPoint = (node) => {
-        const imdbId = node.data.imdbId;
+        const imdbId = node.data.imdbId
         window.open(IMDB_TITLE_URL + imdbId, "_blank");
     }
 
-
-    render() {
-        return (
-            <Fragment>
-                <Header onSubmit={this.makeRequest}/>
+    renderPlot = () => {
+        if (this.state.showPlot) {
+            return (
                 <Plot 
                     name={this.state.name}
                     seasonsData={this.state.seasonsData}
                     minRating={this.state.minRating}
                     maxRating={this.state.maxRating}
                     onClick={this.onClickPoint}/>
+            )
+        } else return null
+    }
+
+    render() {
+        console.log(this.state)
+        return (
+            <Fragment>
+                <Header onSubmit={this.makeRequest}/>
+                {this.renderPlot()}
                 <SeriesOverview
                     poster={this.state.poster}
                     name={this.state.name}
+                    translatedName={this.state.translatedName}
                     runtime={this.state.runtime}
-                    rating={`${this.state.ratingValue}/10 from ${utils.numberWithCommas(this.state.ratingCount)}`}/>
+                    rating={this.generateSeriesRatingText(this.state.ratingValue, this.state.ratingCount)}
+                    summary={this.state.summary}/>
 
             </Fragment>
         )

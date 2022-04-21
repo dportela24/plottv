@@ -3,6 +3,7 @@ import PlotPage from './Containers/PlotPage/PlotPage';
 import HomePage from './Containers/HomePage/HomePage';
 
 function App() {
+  console.log("main")
   return (
     <div className="App">
         <Switch>

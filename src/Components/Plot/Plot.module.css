@@ -1,6 +1,9 @@
+.ScatterPlotContainer {
+    height: 50vh;
+}
+
 .Plot{
     background-color: #1d262b;
-    height: 550px;
     display: flex;
     flex-direction: column;
 }
@@ -10,8 +13,4 @@
     margin: auto;
     padding-top: 10px;
     font-size: 30px;
-}
-
-.ScatterPlotContainer {
-    height: 500px;
 }

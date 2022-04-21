@@ -5,6 +5,7 @@ import { motionDefaultProps } from "@nivo/core"
 import { useState } from "react"
 
 const Header = (props) => {
+    console.log("In header")
     const [query, setQuery] = useState();
 
 
@@ -22,7 +23,7 @@ const Header = (props) => {
                 <input
                     value={query}
                     className={classes.SearchBar}
-                    placeholder={"Enter TV Series name or IMDB ID"}
+                    placeholder={"Enter TV Series name or IMDb Id"}
                     onChange={e => setQuery(e.target.value)}/>
                 <button type="submit" className={classes.SearchButton}>
                     <FontAwesomeIcon icon={faSearch} />

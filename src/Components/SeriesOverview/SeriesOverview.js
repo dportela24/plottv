@@ -13,9 +13,17 @@ const SeriesOverview = (props) => {
                     <span className={classes.Runtime}>{props.runtime}</span>
                 </div>
 
+                <span className={classes.TranslatedName}>
+                    {props.translatedName}
+                </span>
+
                 <span className={classes.Rating}>
                     {props.rating}
                 </span>
+
+                <div className={classes.Summary}>
+                    {props.summary}
+                </div>
             </div>
         </div>
     );
